@@ -7,6 +7,9 @@ public class PitchController : MonoBehaviour
 {
     void Update()
     {
+        // Null check to prevent errors
+        if (PlayMusic.bgm == null) return;
+        
         if (SceneManager.GetActiveScene().name == "MainMenu")
         {
             PlayMusic.bgm.pitch = .75f;

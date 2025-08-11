@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Endless Runner Analytics Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .dashboard {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .stat-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .stat-change {
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .positive {
+            color: #4ade80;
+        }
+
+        .negative {
+            color: #f87171;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .chart-container h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .realtime-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            margin-bottom: 20px;
+        }
+
+        .realtime-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .player-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+
+        .player-card {
+            background: rgba(103, 126, 234, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .player-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .player-name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .player-score {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .player-metrics {
+            display: flex;
+            gap: 15px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .connection-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            border-radius: 25px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .connected {
+            background: #4ade80;
+        }
+
+        .disconnected {
+            background: #f87171;
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+            color: #667eea;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(103, 126, 234, 0.3);
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 15px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .heatmap {
+            width: 100%;
+            height: 300px;
+            background: rgba(103, 126, 234, 0.1);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .heatmap-point {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(248, 113, 113, 0.7);
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard">
+        <div class="header">
+            <h1>🏃‍♂️ Endless Runner Analytics</h1>
+            <p>Real-time Game Analytics & Player Behavior Dashboard</p>
+        </div>
+
+        <div class="connection-status" id="connectionStatus">
+            <span class="spinner"></span> Connecting...
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>👥 Active Players</h3>
+                <div class="stat-value" id="activePlayers">-</div>
+                <div class="stat-change">
+                    <span id="playersChange">Loading...</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <h3>🎯 Average Score</h3>
+                <div class="stat-value" id="averageScore">-</div>
+                <div class="stat-change">
+                    <span id="scoreChange">Loading...</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <h3>⚡ Avg Reaction Time</h3>
+                <div class="stat-value" id="averageReaction">-</div>
+                <div class="stat-change">
+                    <span id="reactionChange">Loading...</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <h3>🎮 Sessions Today</h3>
+                <div class="stat-value" id="sessionsToday">-</div>
+                <div class="stat-change">
+                    <span id="sessionsChange">Loading...</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <h3>🤖 AI Accuracy</h3>
+                <div class="stat-value" id="aiAccuracy">-</div>
+                <div class="stat-change">
+                    <span id="aiChange">Loading...</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <h3>📊 Avg FPS</h3>
+                <div class="stat-value" id="averageFPS">-</div>
+                <div class="stat-change">
+                    <span id="fpsChange">Loading...</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-container">
+                <h3>📈 Score Distribution</h3>
+                <canvas id="scoreChart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h3>⏱️ Session Duration</h3>
+                <canvas id="sessionChart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h3>🎯 Lane Preferences</h3>
+                <canvas id="laneChart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h3>🧠 AI Behavior Patterns</h3>
+                <canvas id="aiChart"></canvas>
+            </div>
+        </div>
+
+        <div class="realtime-section">
+            <h3>🔴 Real-time Players</h3>
+            <div class="player-list" id="playerList">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <span>Loading player data...</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h3>🗺️ Player Movement Heatmap</h3>
+            <div class="heatmap" id="heatmap"></div>
+        </div>
+    </div>
+
+    <script>
+        // Firebase configuration for myendlessrunner project
+        const firebaseConfig = {
+            apiKey: "AIzaSyAT7AAttMiTaC_VPvqq5vdFImRLwLpkOcg",
+            authDomain: "myendlessrunner.firebaseapp.com",
+            databaseURL: "https://myendlessrunner-default-rtdb.firebaseio.com",
+            projectId: "myendlessrunner",
+            storageBucket: "myendlessrunner.appspot.com",
+            messagingSenderId: "553888468732",
+            appId: "1:553888468732:android:75339f88cef8d262831179"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Dashboard state
+        let isConnected = false;
+        let charts = {};
+        let lastUpdate = Date.now();
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function () {
+            initializeCharts();
+            startRealTimeUpdates();
+            updateConnectionStatus();
+        });
+
+        function initializeCharts() {
+            // Score Distribution Chart
+            const scoreCtx = document.getElementById('scoreChart').getContext('2d');
+            charts.scoreChart = new Chart(scoreCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['0-500', '500-1000', '1000-2000', '2000-5000', '5000+'],
+                    datasets: [{
+                        label: 'Players',
+                        data: [0, 0, 0, 0, 0],
+                        backgroundColor: 'rgba(103, 126, 234, 0.6)',
+                        borderColor: 'rgba(103, 126, 234, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+
+            // Session Duration Chart
+            const sessionCtx = document.getElementById('sessionChart').getContext('2d');
+            charts.sessionChart = new Chart(sessionCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Average Session (minutes)',
+                        data: [],
+                        borderColor: 'rgba(248, 113, 113, 1)',
+                        backgroundColor: 'rgba(248, 113, 113, 0.1)',
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+
+            // Lane Preferences Chart
+            const laneCtx = document.getElementById('laneChart').getContext('2d');
+            charts.laneChart = new Chart(laneCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Left Lane', 'Center Lane', 'Right Lane'],
+                    datasets: [{
+                        data: [33, 34, 33],
+                        backgroundColor: [
+                            'rgba(103, 126, 234, 0.8)',
+                            'rgba(248, 113, 113, 0.8)',
+                            'rgba(74, 222, 128, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true
+                }
+            });
+
+            // AI Behavior Chart
+            const aiCtx = document.getElementById('aiChart').getContext('2d');
+            charts.aiChart = new Chart(aiCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Prediction Accuracy', 'Difficulty Adaptation', 'Player Challenge', 'Engagement', 'Fairness'],
+                    datasets: [{
+                        label: 'AI Performance',
+                        data: [75, 80, 70, 85, 90],
+                        borderColor: 'rgba(118, 75, 162, 1)',
+                        backgroundColor: 'rgba(118, 75, 162, 0.2)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        function startRealTimeUpdates() {
+            // Listen to real-time player data
+            database.ref('active_players').on('value', (snapshot) => {
+                updatePlayersList(snapshot.val());
+            });
+
+            // Listen to game metrics
+            database.ref('game_metrics').on('value', (snapshot) => {
+                updateMetrics(snapshot.val());
+            });
+
+            // Listen to AI metrics
+            database.ref('ai_metrics').on('value', (snapshot) => {
+                updateAIMetrics(snapshot.val());
+            });
+
+            // Update charts every 30 seconds
+            setInterval(updateCharts, 30000);
+        }
+
+        function updateConnectionStatus() {
+            const statusEl = document.getElementById('connectionStatus');
+
+            database.ref('.info/connected').on('value', (snapshot) => {
+                isConnected = snapshot.val() === true;
+
+                if (isConnected) {
+                    statusEl.className = 'connection-status connected';
+                    statusEl.textContent = '🟢 Connected';
+                } else {
+                    statusEl.className = 'connection-status disconnected';
+                    statusEl.textContent = '🔴 Disconnected';
+                }
+            });
+        }
+
+        function updateMetrics(metrics) {
+            if (!metrics) return;
+
+            // Update stat cards
+            document.getElementById('activePlayers').textContent = metrics.activePlayers || 0;
+            document.getElementById('averageScore').textContent = Math.round(metrics.averageScore || 0);
+            document.getElementById('averageReaction').textContent = `${(metrics.averageReactionTime || 0).toFixed(2)}s`;
+            document.getElementById('sessionsToday').textContent = metrics.sessionsToday || 0;
+            document.getElementById('averageFPS').textContent = Math.round(metrics.averageFPS || 0);
+
+            // Update change indicators (mock data for demonstration)
+            updateChangeIndicator('playersChange', 5);
+            updateChangeIndicator('scoreChange', 12);
+            updateChangeIndicator('reactionChange', -3);
+            updateChangeIndicator('sessionsChange', 23);
+            updateChangeIndicator('fpsChange', 2);
+        }
+
+        function updateAIMetrics(aiMetrics) {
+            if (!aiMetrics) return;
+
+            const accuracy = Math.round((aiMetrics.predictionAccuracy || 0.75) * 100);
+            document.getElementById('aiAccuracy').textContent = `${accuracy}%`;
+            updateChangeIndicator('aiChange', 3);
+
+            // Update AI chart
+            if (charts.aiChart) {
+                charts.aiChart.data.datasets[0].data = [
+                    accuracy,
+                    Math.round((aiMetrics.adaptability || 0.8) * 100),
+                    Math.round((aiMetrics.challengeLevel || 0.7) * 100),
+                    Math.round((aiMetrics.engagement || 0.85) * 100),
+                    Math.round((aiMetrics.fairness || 0.9) * 100)
+                ];
+                charts.aiChart.update();
+            }
+        }
+
+        function updateChangeIndicator(elementId, change) {
+            const element = document.getElementById(elementId);
+            const isPositive = change > 0;
+
+            element.className = `stat-change ${isPositive ? 'positive' : 'negative'}`;
+            element.textContent = `${isPositive ? '↗' : '↘'} ${Math.abs(change)}% vs yesterday`;
+        }
+
+        function updatePlayersList(players) {
+            const playerListEl = document.getElementById('playerList');
+
+            if (!players || Object.keys(players).length === 0) {
+                playerListEl.innerHTML = '<div class="loading">No active players</div>';
+                return;
+            }
+
+            let html = '';
+            Object.entries(players).forEach(([playerId, player]) => {
+                html += `
+                    <div class="player-card">
+                        <div class="player-info">
+                            <span class="player-name">${player.name || 'Anonymous'}</span>
+                            <span class="player-score">${player.currentScore || 0}</span>
+                        </div>
+                        <div class="player-metrics">
+                            <span>⏱️ ${formatTime(player.playTime || 0)}</span>
+                            <span>🎯 ${(player.accuracy || 0).toFixed(1)}%</span>
+                            <span>📊 ${Math.round(player.fps || 0)} FPS</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            playerListEl.innerHTML = html;
+        }
+
+        function updateCharts() {
+            // Simulate updating charts with random data for demonstration
+            // In a real implementation, this would fetch actual data from Firebase
+
+            // Update score distribution
+            if (charts.scoreChart) {
+                const scoreData = [
+                    Math.floor(Math.random() * 20) + 10,
+                    Math.floor(Math.random() * 15) + 8,
+                    Math.floor(Math.random() * 10) + 5,
+                    Math.floor(Math.random() * 8) + 3,
+                    Math.floor(Math.random() * 5) + 1
+                ];
+                charts.scoreChart.data.datasets[0].data = scoreData;
+                charts.scoreChart.update();
+            }
+
+            // Update session duration
+            if (charts.sessionChart) {
+                const now = new Date();
+                const labels = [];
+                const data = [];
+
+                for (let i = 23; i >= 0; i--) {
+                    const hour = new Date(now.getTime() - i * 60 * 60 * 1000);
+                    labels.push(hour.getHours() + ':00');
+                    data.push(Math.random() * 5 + 2); // 2-7 minutes average
+                }
+
+                charts.sessionChart.data.labels = labels;
+                charts.sessionChart.data.datasets[0].data = data;
+                charts.sessionChart.update();
+            }
+
+            // Update lane preferences
+            if (charts.laneChart) {
+                const total = 100;
+                const left = Math.floor(Math.random() * 40) + 20;
+                const right = Math.floor(Math.random() * 40) + 20;
+                const center = total - left - right;
+
+                charts.laneChart.data.datasets[0].data = [left, center, right];
+                charts.laneChart.update();
+            }
+
+            updateHeatmap();
+        }
+
+        function updateHeatmap() {
+            const heatmapEl = document.getElementById('heatmap');
+            heatmapEl.innerHTML = ''; // Clear existing points
+
+            // Generate random heatmap points (in real implementation, use actual player position data)
+            for (let i = 0; i < 50; i++) {
+                const point = document.createElement('div');
+                point.className = 'heatmap-point';
+                point.style.left = Math.random() * 100 + '%';
+                point.style.top = Math.random() * 100 + '%';
+                point.style.opacity = Math.random() * 0.8 + 0.2;
+                heatmapEl.appendChild(point);
+            }
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // Initialize with some demo data
+        setTimeout(() => {
+            updateMetrics({
+                activePlayers: 42,
+                averageScore: 1247,
+                averageReactionTime: 0.65,
+                sessionsToday: 186,
+                averageFPS: 58
+            });
+
+            updateAIMetrics({
+                predictionAccuracy: 0.78,
+                adaptability: 0.82,
+                challengeLevel: 0.74,
+                engagement: 0.87,
+                fairness: 0.91
+            });
+
+            // Demo player data
+            const demoPlayers = {};
+            for (let i = 1; i <= 5; i++) {
+                demoPlayers[`player_${i}`] = {
+                    name: `Player ${i}`,
+                    currentScore: Math.floor(Math.random() * 3000) + 500,
+                    playTime: Math.floor(Math.random() * 300) + 60,
+                    accuracy: Math.random() * 30 + 70,
+                    fps: Math.floor(Math.random() * 20) + 50
+                };
+            }
+            updatePlayersList(demoPlayers);
+
+            updateCharts();
+        }, 2000);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,11 @@
+{
+  "firebase_config": {
+    "project_id": "myendlessrunner",
+    "app_id": "1:553888468732:android:75339f88cef8d262831179",
+    "api_key": "AIzaSyAT7AAttMiTaC_VPvqq5vdFImRLwLpkOcg", 
+    "database_url": "https://myendlessrunner-default-rtdb.firebaseio.com",
+    "storage_bucket": "myendlessrunner.firebasestorage.app",
+    "messaging_sender_id": "553888468732",
+    "auth_domain": "myendlessrunner.firebaseapp.com"
+  }
+}

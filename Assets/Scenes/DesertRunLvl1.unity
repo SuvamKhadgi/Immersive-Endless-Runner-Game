@@ -1609,6 +1609,21 @@ MonoBehaviour:
   detectionRange: 15
   evadeRange: 3
   wanderChangeInterval: 2
+  laneXPositions:
+  - -5
+  - 0
+  - 5
+  useRaycastForGround: 1
+  groundY: 0
+  raycastDistance: 10
+  laneSwitchDelay: 0.5
+  stealthHideRange: 20
+  environmentAvoidRange: 2
+  environmentLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  lingerTimeThreshold: 3
+  lingerLaneBias: 0.6
 --- !u!1001 &29977983
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2344,6 +2359,21 @@ MonoBehaviour:
   detectionRange: 15
   evadeRange: 3
   wanderChangeInterval: 2
+  laneXPositions:
+  - -5
+  - 0
+  - 5
+  useRaycastForGround: 1
+  groundY: 0
+  raycastDistance: 10
+  laneSwitchDelay: 0.5
+  stealthHideRange: 20
+  environmentAvoidRange: 2
+  environmentLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  lingerTimeThreshold: 3
+  lingerLaneBias: 0.6
 --- !u!1001 &54552546
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7852,6 +7882,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1953868468}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &235502609
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 235502611}
+  - component: {fileID: 235502610}
+  m_Layer: 0
+  m_Name: FirebaseDebugger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &235502610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 235502609}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec0c7df90c5b487428e0a1646a590a8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableDebugLogging: 1
+  testDataWrite: 0
+--- !u!4 &235502611
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 235502609}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &236032330
 GameObject:
   m_ObjectHideFlags: 0
@@ -12237,6 +12313,60 @@ SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 13700000, guid: 599b2dc9e6c44a8ebc02ddea1f18d215, type: 3}
   m_PrefabInstance: {fileID: 1024255419}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &430861791
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 430861793}
+  - component: {fileID: 430861792}
+  m_Layer: 0
+  m_Name: SystemIntegration
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &430861792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 430861791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67890123456789012345678901234567, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableFullIntegration: 1
+  debugMode: 1
+  playerMovement: {fileID: 0}
+  levelDistance: {fileID: 0}
+  existingObstacleAIs: []
+  firebaseManager: {fileID: 2077392130}
+  analyticsManager: {fileID: 489864789}
+  advancedAI: {fileID: 0}
+  dashboardManager: {fileID: 0}
+  gameManager: {fileID: 0}
+--- !u!4 &430861793
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 430861791}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &432018377
 GameObject:
   m_ObjectHideFlags: 0
@@ -12988,6 +13118,21 @@ MonoBehaviour:
   detectionRange: 15
   evadeRange: 3
   wanderChangeInterval: 2
+  laneXPositions:
+  - -5
+  - 0
+  - 5
+  useRaycastForGround: 1
+  groundY: 0
+  raycastDistance: 10
+  laneSwitchDelay: 0.5
+  stealthHideRange: 20
+  environmentAvoidRange: 2
+  environmentLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  lingerTimeThreshold: 3
+  lingerLaneBias: 0.6
 --- !u!1 &447261810
 GameObject:
   m_ObjectHideFlags: 0
@@ -14361,6 +14506,54 @@ MonoBehaviour:
   mainCam: {fileID: 963194225}
   levelControl: {fileID: 769976084}
   crashThud: {fileID: 1839975071}
+--- !u!1 &489864788
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 489864790}
+  - component: {fileID: 489864789}
+  m_Layer: 0
+  m_Name: AnalyticsManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &489864789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 489864788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23456789012345678901234567890123, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableRealTimeTracking: 1
+  enableBehaviorPrediction: 1
+  analyticsUpdateInterval: 1
+  maxEventsPerSession: 1000
+--- !u!4 &489864790
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 489864788}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &494712305
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23225,6 +23418,59 @@ MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 2300004, guid: 24a759921bedc2541881a0535a7bfcc8, type: 3}
   m_PrefabInstance: {fileID: 1745442811}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &841427612
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 841427614}
+  - component: {fileID: 841427613}
+  m_Layer: 0
+  m_Name: CloudeDashboard
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &841427613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 841427612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45678901234567890123456789012345, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dashboardEndpoint: https://your-dashboard-api.com
+  apiKey: your-api-key
+  enableRealTimeDashboard: 1
+  dashboardUpdateInterval: 30
+  enableOfflineMode: 1
+  metricsEndpoint: /api/metrics
+  heatmapEndpoint: /api/heatmap
+  leaderboardEndpoint: /api/leaderboard
+  aiInsightsEndpoint: /api/ai-insights
+--- !u!4 &841427614
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 841427612}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &841849067
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25877,6 +26123,55 @@ MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 2300000, guid: a0873148ac8296f43bcd8ca9f39271e3, type: 3}
   m_PrefabInstance: {fileID: 950688042}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &951921514
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 951921516}
+  - component: {fileID: 951921515}
+  m_Layer: 0
+  m_Name: RealtimeDataGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &951921515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 951921514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 901e539426925d048becefc9311be8f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableRealtimeData: 1
+  dataGenerationInterval: 4
+  useProductionMode: 1
+  simulatedUserCount: 8
+  generateContinuousData: 1
+--- !u!4 &951921516
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 951921514}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &956444044
 GameObject:
   m_ObjectHideFlags: 0
@@ -28210,6 +28505,21 @@ MonoBehaviour:
   detectionRange: 15
   evadeRange: 3
   wanderChangeInterval: 2
+  laneXPositions:
+  - -5
+  - 0
+  - 5
+  useRaycastForGround: 1
+  groundY: 0
+  raycastDistance: 10
+  laneSwitchDelay: 0.5
+  stealthHideRange: 20
+  environmentAvoidRange: 2
+  environmentLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  lingerTimeThreshold: 3
+  lingerLaneBias: 0.6
 --- !u!1 &1024643021
 GameObject:
   m_ObjectHideFlags: 0
@@ -28425,6 +28735,21 @@ MonoBehaviour:
   detectionRange: 15
   evadeRange: 3
   wanderChangeInterval: 2
+  laneXPositions:
+  - -5
+  - 0
+  - 5
+  useRaycastForGround: 1
+  groundY: 0
+  raycastDistance: 10
+  laneSwitchDelay: 0.5
+  stealthHideRange: 20
+  environmentAvoidRange: 2
+  environmentLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  lingerTimeThreshold: 3
+  lingerLaneBias: 0.6
 --- !u!1001 &1033361936
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -40211,6 +40536,21 @@ MonoBehaviour:
   detectionRange: 15
   evadeRange: 3
   wanderChangeInterval: 2
+  laneXPositions:
+  - -5
+  - 0
+  - 5
+  useRaycastForGround: 1
+  groundY: 0
+  raycastDistance: 10
+  laneSwitchDelay: 0.5
+  stealthHideRange: 20
+  environmentAvoidRange: 2
+  environmentLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  lingerTimeThreshold: 3
+  lingerLaneBias: 0.6
 --- !u!23 &1469297824 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 2300000, guid: a0873148ac8296f43bcd8ca9f39271e3, type: 3}
@@ -52488,6 +52828,57 @@ MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 2300000, guid: a0873148ac8296f43bcd8ca9f39271e3, type: 3}
   m_PrefabInstance: {fileID: 1868988739}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1869648028
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1869648030}
+  - component: {fileID: 1869648029}
+  m_Layer: 0
+  m_Name: ProductionDataManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1869648029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1869648028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04960a9631a14754dae7fabe71370c9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activateProductionMode: 1
+  dataUploadInterval: 5
+  forceFirebaseConnection: 1
+  generateBackgroundData: 1
+  isUploading: 0
+  totalDataSent: 0
+  lastUploadTime: 
+--- !u!4 &1869648030
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1869648028}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1876641040
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -58192,6 +58583,70 @@ MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 2300010, guid: 24a759921bedc2541881a0535a7bfcc8, type: 3}
   m_PrefabInstance: {fileID: 841849067}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2077392128
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2077392131}
+  - component: {fileID: 2077392130}
+  - component: {fileID: 2077392129}
+  m_Layer: 0
+  m_Name: FirebaseManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2077392129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2077392128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23456789012345678901234567890123, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableRealTimeTracking: 1
+  enableBehaviorPrediction: 1
+  analyticsUpdateInterval: 1
+  maxEventsPerSession: 1000
+--- !u!114 &2077392130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2077392128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12345678901234567890123456789012, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableAnalytics: 1
+  enableAuth: 1
+  enableDatabase: 1
+--- !u!4 &2077392131
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2077392128}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2080898427
 GameObject:
   m_ObjectHideFlags: 0
@@ -60039,3 +60494,10 @@ SceneRoots:
   - {fileID: 1607188701}
   - {fileID: 143464950}
   - {fileID: 1438871251}
+  - {fileID: 841427614}
+  - {fileID: 2077392131}
+  - {fileID: 489864790}
+  - {fileID: 430861793}
+  - {fileID: 235502611}
+  - {fileID: 951921516}
+  - {fileID: 1869648030}
